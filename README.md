@@ -21,8 +21,6 @@
 ![GitHub issues](https://img.shields.io/github/issues/usbangelo/covid19bot-telegram?color=blue&style=for-the-badge)
 ![GitHub Repo stars](https://img.shields.io/github/stars/usbangelo/covid19bot-telegram?color=blue&logo=Star&style=for-the-badge)
 
-[![Stargazers][stars-shield]][stars-url]
-
 <!-- PROJECT LOGO -->
 <br />
 <p align="center">
