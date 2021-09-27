@@ -50,24 +50,25 @@
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="https://github.com/usbangelo/covid19bot-telegram#sobre-o-projeto">Sobre o projeto</a>
+      <a href="#sobre-o-projeto">Sobre o projeto</a>
       <ul>
-        <li><a href="https://github.com/usbangelo/covid19bot-telegram#construido-com">Construido com</a></li>
+        <li><a href="#construido-com">Construido com</a></li>
       </ul>
     </li>
+    <li><a href="#-usando-o-bot">Uso</a></li>
     <li>
-      <a href="#getting-started">Iniciando</a>
+      <a>Acesso ao código</a>
       <ul>
-        <li><a href="#prerequisites">Prerequisitos</a></li>
-        <li><a href="#installation">Instalação/Execução</a></li>
+        <li><a href="#-pré-requisitos">Pré-requisitos</a></li>
+        <li><a href="#-instalando">Instalação/Execução</a></li>
       </ul>
     </li>
-    <li><a href="#usage">Uso</a></li>
+    
     <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Colaboradores</a></li>
+    <li><a href="#-colaboradores">Colaboradores</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgements">Acknowledgements</a></li>
+    <li><a href="#contact">Contato</a></li>
+    <li><a href="#acknowledgements">Conhecimentos</a></li>
   </ol>
 </details>
 
@@ -104,6 +105,12 @@ Para usar Covid-19 TelegramBOT, siga estas etapas:
 
 Adicione o bot no seu telegram no link [t.me/Covid19bsbBot](t.me/Covid19bsbBot) e comece a usar.
 
+```
+Interaja com o bot respeitando os inputs recomendados durante a navegação do fluxo
+```
+
+_Para mais exemplos siga o fluxo aqui [Tutorial](https://example.com)_
+
 ### 💻 Pré-requisitos
 
 Antes de começar, verifique se você atendeu aos seguintes requisitos:
@@ -132,13 +139,7 @@ Antes de começar, verifique se você atendeu aos seguintes requisitos:
 
 ## ☕ Usando
 
-Para usar Covid-19 TelegramBOT, siga estas etapas:
 
-```
-Interaja com o bot respeitando os inputs recomendados durante a navegação do fluxo
-```
-
-_Para mais exemplos siga o fluxo aqui [Tutorial](https://example.com)_
 
 <!-- ROADMAP -->
 
@@ -189,13 +190,13 @@ Distributed under the MIT License. See `LICENSE` for more information.
 
 <!-- CONTACT -->
 
-## Contact
+## Contato
 
 Project Link: [https://github.com/usbangelo/covid19bot-telegram](https://github.com/usbangelo/covid19bot-telegram)
 
 <!-- ACKNOWLEDGEMENTS -->
 
-## Acknowledgements
+## Conhecimentos
 
 - [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
 - [Img Shields](https://shields.io)
