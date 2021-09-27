@@ -32,7 +32,7 @@
 
   <p align="center">
     Um bot funcional e responsivo para telegram para você se informar sobre vacinação, cuidados/profilaxia, informações e ficar longe das fakenews.
-    Esse bot foi desenvolvido para antender a cidade de Brasília-DF. Porém ele pode tyer seu modelo aproveitado para sua cidade.
+    Esse bot foi desenvolvido para antender a cidade de Brasília-DF. Porém ele pode ter seu modelo aproveitado para sua cidade.
     <br />
     <a href="https://github.com/usbangelo/covid19bot-telegram"><strong>Explore the docs »</strong></a>
     <br />
@@ -77,7 +77,7 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-Descrição do projeto...
+Devido a crise que ocorreu em 2020e 2021 pela pandemia do Covid-19, a necessidade de acesso a fácil informação sobre a doença cresceu e a maioria das informações estão separadas na pela internet, para atender à centralização de informações e as fake news envolvendo o Covid-19 desenvolvemos esse bot do telegram que compila e entrega informações retiradas de fontes confiáveis como Secretaria de Saúde do DF, Site da OMS(Organização Mundial da Saúde). O usuário tem acesso aos postos de saúde mais próximos indicados para suas doses da vacina, informações sobre combate e profilaxia, recomendação de máscaras, informações, curiosidades, combate a fake news e incentivo das medidas recomendadas. O software faz integração com aplicativo do Telegram, onde o usuário realiza uma solicitação por ele e a mesma é processada, analisada pelo chatbot, a fim de sanar dúvidas relacionadas ao covid-19 com respostas automatizadas.
 
 ### Construido com
 
@@ -87,11 +87,14 @@ Descrição do projeto...
 
 O projeto ainda está em desenvolvimento e as próximas atualizações serão voltadas nas seguintes tarefas:
 
-- [x] Tarefa 1
-- [x] Tarefa 2
-- [x] Tarefa 3
-- [ ] Tarefa 4
-- [ ] Tarefa 5
+- [x] Acesso a API do Telegram
+- [x] Token do bot
+- [x] Event Listener dos inputs do chat
+- [ ] Respostas automatizadas
+- [ ] 
+- [ ] 
+- [ ] 
+- [ ] 
 
 <!-- GETTING STARTED -->
 
@@ -104,9 +107,7 @@ Adicione o bot no seu telegram no link [t.me/Covid19bsbBot](t.me/Covid19bsbBot) 
 ### 💻 Pré-requisitos
 
 Antes de começar, verifique se você atendeu aos seguintes requisitos:
-
 <!---Estes são apenas requisitos de exemplo. Adicionar, duplicar ou remover conforme necessário--->
-
 - Você instalou a versão mais recente `<python 3.9>`
 - Você tem uma máquina `<Windows / Linux / Mac>`. Indique qual sistema operacional é compatível / não compatível.
 - Você leu `<guia / link / documentação_relacionada_ao_projeto>`
@@ -115,7 +116,7 @@ Antes de começar, verifique se você atendeu aos seguintes requisitos:
 
 1. Clone the repo
    ```sh
-   git clone https://github.com/your_username_/Project-Name.git
+   git clone https://github.com/usbangelo/covid19bot-telegram
    ```
 2. Install pip packages
    ```sh
@@ -131,7 +132,7 @@ Antes de começar, verifique se você atendeu aos seguintes requisitos:
 
 ## ☕ Usando
 
-Para usar <nome_do_projeto>, siga estas etapas:
+Para usar Covid-19 TelegramBOT, siga estas etapas:
 
 ```
 Interaja com o bot respeitando os inputs recomendados durante a navegação do fluxo
