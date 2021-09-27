@@ -50,9 +50,9 @@
   <summary>Table of Contents</summary>
   <ol>
     <li>
-      <a href="#about-the-project">Sobre o projeto</a>
+      <a href="https://github.com/usbangelo/covid19bot-telegram#sobre-o-projeto">Sobre o projeto</a>
       <ul>
-        <li><a href="#built-with">Construido com</a></li>
+        <li><a href="https://github.com/usbangelo/covid19bot-telegram#construido-com">Construido com</a></li>
       </ul>
     </li>
     <li>
@@ -77,7 +77,7 @@
 
 [![Product Name Screen Shot][product-screenshot]](https://example.com)
 
-Devido a crise que ocorreu em 2020e 2021 pela pandemia do Covid-19, a necessidade de acesso a fácil informação sobre a doença cresceu e a maioria das informações estão separadas na pela internet, para atender à centralização de informações e as fake news envolvendo o Covid-19 desenvolvemos esse bot do telegram que compila e entrega informações retiradas de fontes confiáveis como Secretaria de Saúde do DF, Site da OMS(Organização Mundial da Saúde). O usuário tem acesso aos postos de saúde mais próximos indicados para suas doses da vacina, informações sobre combate e profilaxia, recomendação de máscaras, informações, curiosidades, combate a fake news e incentivo das medidas recomendadas. O software faz integração com aplicativo do Telegram, onde o usuário realiza uma solicitação por ele e a mesma é processada, analisada pelo chatbot, a fim de sanar dúvidas relacionadas ao covid-19 com respostas automatizadas.
+Devido a crise que ocorreu em 2020 e 2021 pela pandemia do Covid-19, a necessidade de acesso a fácil informação sobre a doença cresceu e a maioria das informações estão separadas na pela internet, para atender à centralização de informações e as fake news envolvendo o Covid-19 desenvolvemos esse bot do telegram que compila e entrega informações retiradas de fontes confiáveis como Secretaria de Saúde do DF, Site da OMS(Organização Mundial da Saúde). O usuário tem acesso aos postos de saúde mais próximos indicados para suas doses da vacina, informações sobre combate e profilaxia, recomendação de máscaras, informações, curiosidades, combate a fake news e incentivo das medidas recomendadas. O software faz integração com aplicativo do Telegram, onde o usuário realiza uma solicitação por ele e a mesma é processada, analisada pelo chatbot, a fim de sanar dúvidas relacionadas ao covid-19 com respostas automatizadas.
 
 ### Construido com
 
