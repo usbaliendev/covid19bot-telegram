@@ -25,7 +25,7 @@
 <br />
 <p align="center">
   <a href="https://github.com/usbangelo/covid19bot-telegram">
-    <img src="product-screenshot" alt="Logo" width="80" height="80">
+    <img src="https://raw.githubusercontent.com/othneildrew/Best-README-Template/master/images/logo.png" alt="Logo" width="80" height="80">
   </a>
 
   <h3 align="center">Covid-19 TelegramBOT</h3>
