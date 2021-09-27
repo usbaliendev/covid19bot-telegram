@@ -53,6 +53,7 @@
       <a href="#sobre-o-projeto">Sobre o projeto</a>
       <ul>
         <li><a href="#construido-com">Construido com</a></li>
+        <li><a href="#ajustes-e-melhorias">Ajustes e melhorias</a></li>
       </ul>
     </li>
     <li><a href="#-usando-o-bot">Uso</a></li>
@@ -63,12 +64,11 @@
         <li><a href="#-instalando">Instalação/Execução</a></li>
       </ul>
     </li>
-    
     <li><a href="#roadmap">Roadmap</a></li>
     <li><a href="#-colaboradores">Colaboradores</a></li>
     <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contato</a></li>
-    <li><a href="#acknowledgements">Conhecimentos</a></li>
+    <li><a href="#contato">Contato</a></li>
+    <li><a href="#conhecimentosye">Conhecimentos</a></li>
   </ol>
 </details>
 
@@ -92,12 +92,17 @@ O projeto ainda está em desenvolvimento e as próximas atualizações serão vo
 - [x] Token do bot
 - [x] Event Listener dos inputs do chat
 - [ ] Respostas automatizadas
-- [ ] 
-- [ ] 
-- [ ] 
-- [ ] 
+- [x] 1 - Pontos de vacinação para primeira dose
+- [ ] 2 - Pontos de vacinação para segunda dose
+- [ ] 3 - Pontos de vacinação para dose de reforço para 85+
+- [x] 4 - Máscaras Recomendadas
+- [x] 5 - Profilaxia
+- [ ] 6 - Taixa de eficácia das vacinas
+- [ ] 7 - Tempo de espera das doses de vacinas (Remind me)
+- [ ] 8 - Outras funcionalidades em desenvolvimento
 
 <!-- GETTING STARTED -->
+<!-- USAGE EXAMPLES -->
 
 ## ☕ Usando o Bot
 
@@ -135,12 +140,6 @@ Antes de começar, verifique se você atendeu aos seguintes requisitos:
    token = '29812387126309840:AKSJHDIUY3B_hqjkakjashdk908CV_VAKJDKASBKJASJBWl_d76R98_cOCX'
    ```
 
-<!-- USAGE EXAMPLES -->
-
-## ☕ Usando
-
-
-
 <!-- ROADMAP -->
 
 ## Roadmap
@@ -163,22 +162,6 @@ Agradecemos às seguintes pessoas que contribuíram para este projeto:
         </sub>
       </a>
     </td>
-    <td align="center">
-      <a href="#">
-        <img src="https://s2.glbimg.com/FUcw2usZfSTL6yCCGj3L3v3SpJ8=/smart/e.glbimg.com/og/ed/f/original/2019/04/25/zuckerberg_podcast.jpg" width="100px;" alt="Foto do Mark Zuckerberg"/><br>
-        <sub>
-          <b>Mark Zuckerberg</b>
-        </sub>
-      </a>
-    </td>
-    <td align="center">
-      <a href="#">
-        <img src="https://miro.medium.com/max/360/0*1SkS3mSorArvY9kS.jpg" width="100px;" alt="Foto do Steve Jobs"/><br>
-        <sub>
-          <b>Steve Jobs</b>
-        </sub>
-      </a>
-    </td>
   </tr>
 </table>
 
@@ -196,7 +179,7 @@ Project Link: [https://github.com/usbangelo/covid19bot-telegram](https://github.
 
 <!-- ACKNOWLEDGEMENTS -->
 
-## Conhecimentos
+## Conhecimentos Utilizados
 
 - [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
 - [Img Shields](https://shields.io)
