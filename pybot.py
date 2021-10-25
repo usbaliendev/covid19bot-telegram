@@ -1,14 +1,4 @@
-#!/usr/bin/env python
-# pylint: disable=C0116,W0613
-# This program is dedicated to the public domain under the CC0 license.
-
-"""Simple inline keyboard bot with multiple CallbackQueryHandlers.
-This Bot uses the Updater class to handle the bot.
-First, a few callback functions are defined as callback query handler. Then, those functions are
-passed to the Dispatcher and registered at their respective places.
-Then, the bot is started and runs until we press Ctrl-C on the command line.
-Usage:
-Example of a bot that uses inline keyboard that has multiple CallbackQueryHandlers arranged in a
+"""Simple bot that uses inline keyboard that has multiple CallbackQueryHandlers arranged in a
 ConversationHandler.
 Send /start to initiate the conversation.
 Press Ctrl-C on the command line to stop the bot.
@@ -54,6 +44,7 @@ def start(update: Update, context: CallbackContext) -> int:
             InlineKeyboardButton("4", callback_data=str(SEVEN)),
             InlineKeyboardButton("5", callback_data=str(SEVEN)),
             InlineKeyboardButton("6", callback_data=str(SEVEN)),
+            InlineKeyboardButton("outro", callback_data=str(SEVEN)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -64,9 +55,10 @@ def start(update: Update, context: CallbackContext) -> int:
         1 - Locais Postos de vacinação
         2 - Máscaras Recomendadas
         3 - Cuidados e Profilaxia
-        4 - Taixa de eficácia das vacinas
+        4 - Taxa de eficácia das vacinas
         5 - Tempo de intervalo das doses (Remind me)
         6 - Outras funcionalidades em desenvolvimento..
+        7 - TESTE DE ATUALIZACAO
         ''', reply_markup=reply_markup)
     # Tell ConversationHandler that we're in state `FIRST` now
     return FIRST
@@ -87,6 +79,8 @@ def start_over(update: Update, context: CallbackContext) -> int:
             InlineKeyboardButton("4", callback_data=str(SEVEN)),
             InlineKeyboardButton("5", callback_data=str(SEVEN)),
             InlineKeyboardButton("6", callback_data=str(SEVEN)),
+            InlineKeyboardButton("6", callback_data=str(SEVEN)),
+            InlineKeyboardButton("Outro", callback_data=str(SEVEN)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -99,9 +93,10 @@ def start_over(update: Update, context: CallbackContext) -> int:
         1 - Locais Postos de vacinação
         2 - Máscaras Recomendadas
         3 - Cuidados e Profilaxia
-        4 - Taixa de eficácia das vacinas
+        4 - Taxa de eficácia das vacinas
         5 - Tempo de intervalo das doses (Remind me)
         6 - Outras funcionalidades em desenvolvimento..
+        7 - TESTE DE ATUALIZACAO
         ''', reply_markup=reply_markup)
     return FIRST
 
@@ -120,6 +115,7 @@ def locais(update: Update, context: CallbackContext) -> int:
                 "PN", callback_data=str(PNOTURNO)),
             InlineKeyboardButton("Home", callback_data=str(START)),
             InlineKeyboardButton("Close", callback_data=str(END)),
+            
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -327,12 +323,14 @@ def cuidados(update: Update, context: CallbackContext) -> int:
     return SECOND
 
 
+
 def end(update: Update, context: CallbackContext) -> int:
     """Returns `ConversationHandler.END`, which tells the
     ConversationHandler that the conversation is over.
     """
     query = update.callback_query
     query.answer()
+
     query.edit_message_text(text="Nos vemos na próxima consulta!")
     return ConversationHandler.END
 
@@ -372,6 +370,7 @@ def main() -> None:
                 CallbackQueryHandler(
                     start_over, pattern='^' + str(START) + '$'),
                 CallbackQueryHandler(end, pattern='^' + str(END) + '$'),
+
             ],
             SECOND: [
                 CallbackQueryHandler(
