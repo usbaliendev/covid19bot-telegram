@@ -23,8 +23,8 @@ logger = logging.getLogger(__name__)
 # Stages
 FIRST, SECOND = range(2)
 # Callback data
-LOC, DOSE1, DOSE2, DOSER85, PNOTURNO, SIX, SEVEN, CARE, MASK, START, END = range(
-    11)
+LOC, DOSE1, DOSE2, DOSER85, PNOTURNO, SIX, SEVEN, TAXAEFICACIA, EFIASTRAZENECA, EFICORONA, EFIPFIZER, OPCOES2, NOVAVARIANTE, TERCEIRADOSE, COMOFUNCIONAVACINA,  CARE, MASK, START, END = range(
+    19)
 
 
 def start(update: Update, context: CallbackContext) -> int:
@@ -41,10 +41,10 @@ def start(update: Update, context: CallbackContext) -> int:
             InlineKeyboardButton("1", callback_data=str(LOC)),
             InlineKeyboardButton("2", callback_data=str(MASK)),
             InlineKeyboardButton("3", callback_data=str(CARE)),
-            InlineKeyboardButton("4", callback_data=str(SEVEN)),
+            InlineKeyboardButton("4", callback_data=str(TAXAEFICACIA)),
             InlineKeyboardButton("5", callback_data=str(SEVEN)),
             InlineKeyboardButton("6", callback_data=str(SEVEN)),
-            InlineKeyboardButton("outro", callback_data=str(SEVEN)),
+            InlineKeyboardButton("...", callback_data=str(OPCOES2)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -76,11 +76,10 @@ def start_over(update: Update, context: CallbackContext) -> int:
             InlineKeyboardButton("1", callback_data=str(LOC)),
             InlineKeyboardButton("2", callback_data=str(MASK)),
             InlineKeyboardButton("3", callback_data=str(CARE)),
-            InlineKeyboardButton("4", callback_data=str(SEVEN)),
+            InlineKeyboardButton("4", callback_data=str(TAXAEFICACIA)),
             InlineKeyboardButton("5", callback_data=str(SEVEN)),
             InlineKeyboardButton("6", callback_data=str(SEVEN)),
-            InlineKeyboardButton("6", callback_data=str(SEVEN)),
-            InlineKeyboardButton("Outro", callback_data=str(SEVEN)),
+            InlineKeyboardButton("...", callback_data=str(OPCOES2)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -115,7 +114,7 @@ def locais(update: Update, context: CallbackContext) -> int:
                 "PN", callback_data=str(PNOTURNO)),
             InlineKeyboardButton("Home", callback_data=str(START)),
             InlineKeyboardButton("Close", callback_data=str(END)),
-            
+
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -272,6 +271,220 @@ def seven(update: Update, context: CallbackContext) -> int:
     return FIRST
 
 
+def taxaeficacia(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+            InlineKeyboardButton("1", callback_data=str(EFIASTRAZENECA)),
+            InlineKeyboardButton("2", callback_data=str(EFICORONA)),
+            InlineKeyboardButton("3", callback_data=str(EFIPFIZER)),
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''Escolha a opção da vacina que deseja saber a eficácia:
+
+        1 - Astrazeneca
+        2 - Coronavac
+        3 - Pfizer
+        ''', reply_markup=reply_markup
+    )
+    return FIRST
+
+
+def efiastrazeneca(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+            InlineKeyboardButton("Voltar", callback_data=str(TAXAEFICACIA)),
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''
+        1 - Astrazeneca
+
+        A vacina demonstrou eficácia de 70,4% contra a infecção e 100% contra casos graves da infecção.
+
+
+        fonte: https://www.tuasaude.com/vacina-covid/
+        ''', reply_markup=reply_markup
+    )
+    return FIRST
+
+
+def eficorona(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+            InlineKeyboardButton("Voltar", callback_data=str(TAXAEFICACIA)),
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''
+        2 - Coronavac
+
+        A vacina demonstrou uma taxa de eficácia de 78% para casos leves e de 100% para infecções moderadas e graves.
+
+
+        fonte: https://www.tuasaude.com/vacina-covid/
+        ''', reply_markup=reply_markup
+    )
+    return FIRST
+
+
+def efipfizer(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+            InlineKeyboardButton("Voltar", callback_data=str(TAXAEFICACIA)),
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''
+        2 - Pfizer
+
+        A vacina apresentou 95% de eficácia contra infecção e 100% contra casos graves da doença.
+
+
+        fonte: https://www.tuasaude.com/vacina-covid/
+        ''', reply_markup=reply_markup
+    )
+    return FIRST
+
+
+def opcoes2(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+            InlineKeyboardButton("1", callback_data=str(COMOFUNCIONAVACINA)),
+            InlineKeyboardButton("2", callback_data=str(TERCEIRADOSE)),
+            InlineKeyboardButton("3", callback_data=str(NOVAVARIANTE)),
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''Mais informações sobre a vacina:
+
+        1 - Como a vacina funciona
+        2 - É preciso tomar terceira dose?
+        3 - A vacina contra a nova variante
+
+
+
+        ''', reply_markup=reply_markup
+    )
+    return FIRST
+
+
+def comofunciona(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+            InlineKeyboardButton("Voltar", callback_data=str(OPCOES2)),
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''1 - Como a vacina funciona
+        
+        Tecnologia genética do RNA mensageiro (Pfizer e Moderna): é uma tecnologia mais utilizada na produção de vacinas para animais e que faz com que as células saudáveis do corpo produzam a mesma proteína que o coronavírus utiliza para entrar nas células. Ao fazer isso, o sistema imune é obrigado a produzir anticorpos que, durante uma infecção, podem neutralizar a proteína do verdadeiro coronavírus e impedir o desenvolvimento da infecção;
+
+        Uso de adenovírus modificados (Astrazeneca, Sputnik V e J&J): consiste em utilizar adenovírus, que são inofensivos para o corpo humano, e modificá-los geneticamente para que atuem de forma parecida com o coronavírus, mas sem risco para a saúde. Isso faz com que o sistema imunológico treine e produza anticorpos capazes de eliminar o vírus caso aconteça a infecção;
+        
+        Uso do coronavírus inativado (Coronavac) : é utilizada uma forma inativada do novo coronavírus que não provoca a infecção, nem problemas para a saúde, mas que permite ao corpo produzir os anticorpos necessários para combater o vírus.
+
+        fonte: https://www.tuasaude.com/vacina-covid/
+        ''', reply_markup=reply_markup
+    )
+    return FIRST
+
+
+def terceiradose(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+            InlineKeyboardButton("Voltar", callback_data=str(OPCOES2)),
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''2 - É preciso tomar terceira dose?
+
+        O Ministério da Saúde no Brasil autorizou a terceira dose da vacina contra a COVID-19, com previsão de iniciar a aplicação em setembro, preferencialmente com uma dose de reforço da vacina da Pfizer, ou de forma alternativa, uma dose de uma das vacinas da AstraZeneca ou da Janssen.
+
+        Essa dose de reforço inicialmente será feita em idosos com mais de 60 anos, que tenham recebido as duas doses de qualquer outra vacina da COVID-19 há pelo menos 6 meses, ou para pessoas com o sistema imunológico enfraquecido, que completaram o esquema de vacinação com duas doses de qualquer vacina ou dose única da Janssen há pelo menos 28 dias, e para profissionais de saúde. [5]. Veja quando tomar a terceira dose da vacina contra a COVID-19. 
+
+        Em Portugal, a Agência Europeia de Medicamentos autorizou a aplicação da terceira dose da vacina contra a COVID-19 com Pfizer para pessoas acima dos 65 anos e que foram vacinadas com esse imunizante, e com Moderna para pessoas a partir dos 18 anos 6 a 8 meses após completar o esquema vacinal, sendo recomendada meia dose.
+
+
+        fonte: https://www.tuasaude.com/vacina-covid/
+        ''', reply_markup=reply_markup
+    )
+    return FIRST
+
+
+def novavariante(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+
+            InlineKeyboardButton("Voltar", callback_data=str(OPCOES2)),
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''3 - A vacina contra a nova variante
+
+        De acordo com a OMS [3], as vacinas contra a COVID-19 deverão apresentar efeito contra as variantes do vírus que forem surgindo, já que estimulam uma complexa resposta imune de todo o organismo, que ficará "atento" para partículas do novo coronavírus, mesmo que surjam algumas modificações na sua estrutura.
+
+        Ainda assim, mesmo que se fique infectado com uma nova variante, as chances de desenvolver uma infecção grave que coloque a vida em risco é muito inferior para quem se encontra completamente imunizado, ou seja, com mais de 2 semanas após a 2ª dose da vacina.
+
+        É esperado que, ao longo do tempo, e à medida que vão surgindo novas variantes, que a composição das vacinas seja gradualmente atualizada, para conferir maior proteção.
+
+
+
+
+        fonte: https://www.tuasaude.com/vacina-covid/
+        ''', reply_markup=reply_markup
+    )
+    return FIRST
+
+
 def mascaras(update: Update, context: CallbackContext) -> int:
     """Show new choice of buttons"""
     query = update.callback_query
@@ -323,7 +536,6 @@ def cuidados(update: Update, context: CallbackContext) -> int:
     return SECOND
 
 
-
 def end(update: Update, context: CallbackContext) -> int:
     """Returns `ConversationHandler.END`, which tells the
     ConversationHandler that the conversation is over.
@@ -338,7 +550,7 @@ def end(update: Update, context: CallbackContext) -> int:
 def main() -> None:
     """Run the bot."""
     # Create the Updater and pass it your bot's token.
-    readarq = open("token.txt")
+    readarq = open("token2.txt")
     token = readarq.read()
     readarq.close()
     updater = Updater(token)
@@ -365,6 +577,22 @@ def main() -> None:
                     pnoturno, pattern='^' + str(PNOTURNO) + '$'),
                 CallbackQueryHandler(six, pattern='^' + str(SIX) + '$'),
                 CallbackQueryHandler(seven, pattern='^' + str(SEVEN) + '$'),
+                CallbackQueryHandler(
+                    taxaeficacia, pattern='^' + str(TAXAEFICACIA) + '$'),
+                CallbackQueryHandler(
+                    efiastrazeneca, pattern='^' + str(EFIASTRAZENECA) + '$'),
+                CallbackQueryHandler(
+                    eficorona, pattern='^' + str(EFICORONA) + '$'),
+                CallbackQueryHandler(
+                    efipfizer, pattern='^' + str(EFIPFIZER) + '$'),
+                CallbackQueryHandler(
+                    opcoes2, pattern='^' + str(OPCOES2) + '$'),
+                CallbackQueryHandler(
+                    comofunciona, pattern='^' + str(COMOFUNCIONAVACINA) + '$'),
+                CallbackQueryHandler(
+                    terceiradose, pattern='^' + str(TERCEIRADOSE) + '$'),
+                CallbackQueryHandler(
+                    novavariante, pattern='^' + str(NOVAVARIANTE) + '$'),
                 CallbackQueryHandler(mascaras, pattern='^' + str(MASK) + '$'),
                 CallbackQueryHandler(cuidados, pattern='^' + str(CARE) + '$'),
                 CallbackQueryHandler(
