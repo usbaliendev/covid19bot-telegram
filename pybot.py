@@ -12,6 +12,7 @@ from telegram.ext import (
     ConversationHandler,
     CallbackContext,
 )
+import datetime
 
 # Enable logging
 logging.basicConfig(
@@ -23,8 +24,8 @@ logger = logging.getLogger(__name__)
 # Stages
 FIRST, SECOND = range(2)
 # Callback data
-LOC, DOSE1, DOSE2, DOSER85, PNOTURNO, SIX, SEVEN, TAXAEFICACIA, EFIASTRAZENECA, EFICORONA, EFIPFIZER, OPCOES2, NOVAVARIANTE, TERCEIRADOSE, COMOFUNCIONAVACINA,  CARE, MASK, START, END = range(
-    19)
+LOC, DOSE1, DOSE2, DOSER85, PNOTURNO, SIX, SEVEN, TAXAEFICACIA, EFIASTRAZENECA, EFICORONA, EFIPFIZER, OPCOES2, NOVAVARIANTE, TERCEIRADOSE, COMOFUNCIONAVACINA, STATUS2DOSE, CARE, MASK, START, END, ASTRA2DOSE, CORONA2DOSE, PFIZER2DOSE = range(
+    23)
 
 
 def start(update: Update, context: CallbackContext) -> int:
@@ -42,7 +43,7 @@ def start(update: Update, context: CallbackContext) -> int:
             InlineKeyboardButton("2", callback_data=str(MASK)),
             InlineKeyboardButton("3", callback_data=str(CARE)),
             InlineKeyboardButton("4", callback_data=str(TAXAEFICACIA)),
-            InlineKeyboardButton("5", callback_data=str(SEVEN)),
+            InlineKeyboardButton("5", callback_data=str(STATUS2DOSE)),
             InlineKeyboardButton("6", callback_data=str(SEVEN)),
             InlineKeyboardButton("...", callback_data=str(OPCOES2)),
         ]
@@ -77,7 +78,7 @@ def start_over(update: Update, context: CallbackContext) -> int:
             InlineKeyboardButton("2", callback_data=str(MASK)),
             InlineKeyboardButton("3", callback_data=str(CARE)),
             InlineKeyboardButton("4", callback_data=str(TAXAEFICACIA)),
-            InlineKeyboardButton("5", callback_data=str(SEVEN)),
+            InlineKeyboardButton("5", callback_data=str(STATUS2DOSE)),
             InlineKeyboardButton("6", callback_data=str(SEVEN)),
             InlineKeyboardButton("...", callback_data=str(OPCOES2)),
         ]
@@ -536,6 +537,117 @@ def cuidados(update: Update, context: CallbackContext) -> int:
     return SECOND
 
 
+def quandoTomarSegundaDose(vacina, ano, mes, dia):
+
+    dataVacina = datetime.date(ano, mes, dia)
+    tCoronaVac = datetime.timedelta(14)
+    tAstrazeneca = datetime.timedelta(56)
+    tPfizer = datetime.timedelta(56)
+
+    if vacina == 'coronavac' or vacina == 'CoronaVAC' or vacina == 'CORONAVAC':
+        dataSegundaDose = dataVacina + tCoronaVac
+    if vacina == 'Astrazeneca' or vacina == 'astrazeneca' or vacina == "ASTRAZENECA":
+        dataSegundaDose = dataVacina + tAstrazeneca
+    if vacina == 'pfizer' or vacina == 'Pfizer' or vacina == 'PFIZER':
+        dataSegundaDose = dataVacina + tPfizer
+    else:
+        'Vacina inválida'
+
+    return dataSegundaDose
+
+
+def status2dose(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+            InlineKeyboardButton("1", callback_data=str(ASTRA2DOSE)),
+            InlineKeyboardButton("2", callback_data=str(CORONA2DOSE)),
+            InlineKeyboardButton("3", callback_data=str(PFIZER2DOSE)),
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''Qual segunda dose gostaria de saber quando tomar?
+
+        1 - Astrazeneca 
+        2 - CoronaVac
+        3 - Pfizer
+
+
+        ''', reply_markup=reply_markup
+    )
+    return FIRST
+
+
+def astra2dose(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+            InlineKeyboardButton("voltar", callback_data=str(STATUS2DOSE)),
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''Astrazeneca: 2 doses, com intervalo de 8 semanas;
+
+
+        ''', reply_markup=reply_markup
+    )
+    return FIRST
+
+
+def corona2dose(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+
+            InlineKeyboardButton("voltar", callback_data=str(STATUS2DOSE)),
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''Coronavac: 2 doses, com intervalo de 2 a 4 semanas;
+
+
+        ''', reply_markup=reply_markup
+    )
+    return FIRST
+
+
+def pfizer2dose(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+
+            InlineKeyboardButton("voltar", callback_data=str(STATUS2DOSE)),
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''Pfizer e BioNTech: 2 doses, com intervalo de 8 semanas;
+
+
+        ''', reply_markup=reply_markup
+    )
+    return FIRST
+
+
 def end(update: Update, context: CallbackContext) -> int:
     """Returns `ConversationHandler.END`, which tells the
     ConversationHandler that the conversation is over.
@@ -595,6 +707,14 @@ def main() -> None:
                     novavariante, pattern='^' + str(NOVAVARIANTE) + '$'),
                 CallbackQueryHandler(mascaras, pattern='^' + str(MASK) + '$'),
                 CallbackQueryHandler(cuidados, pattern='^' + str(CARE) + '$'),
+                CallbackQueryHandler(
+                    status2dose, pattern='^' + str(STATUS2DOSE) + '$'),
+                CallbackQueryHandler(
+                    astra2dose, pattern='^' + str(ASTRA2DOSE) + '$'),
+                CallbackQueryHandler(
+                    corona2dose, pattern='^' + str(CORONA2DOSE) + '$'),
+                CallbackQueryHandler(
+                    pfizer2dose, pattern='^' + str(PFIZER2DOSE) + '$'),
                 CallbackQueryHandler(
                     start_over, pattern='^' + str(START) + '$'),
                 CallbackQueryHandler(end, pattern='^' + str(END) + '$'),
