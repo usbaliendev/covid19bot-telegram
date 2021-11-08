@@ -334,16 +334,16 @@ def end(update: Update, context: CallbackContext) -> int:
     query.edit_message_text(text="Nos vemos na próxima consulta!")
     return ConversationHandler.END
 
-def linkagendamento(update: Update, context: CallbackContext) -> int:
+def linkredirecionamento(update: Update, context: CallbackContext) -> int:
 
     query = update.callback_query
     query.answer()
     keyboard = [
         [
-            InlineKeyboardButton("1", callback_data=str(DF)),
-            InlineKeyboardButton("2", callback_data=str(SP)),
-            InlineKeyboardButton("3", callback_data=str(MG)),
-            InlineKeyboardButton("4", callback_data=str(RS)),
+            InlineKeyboardButton("1", callback_data=str(agendamento)),
+            InlineKeyboardButton("2", callback_data=str(comorbidade)),
+            InlineKeyboardButton("3", callback_data=str(consultar)),
+            InlineKeyboardButton("4", callback_data=str(imprimir)),
             InlineKeyboardButton("Voltar", callback_data=str(LOC)),
             InlineKeyboardButton("Home", callback_data=str(START)),
             InlineKeyboardButton("Close", callback_data=str(END)),
@@ -352,11 +352,11 @@ def linkagendamento(update: Update, context: CallbackContext) -> int:
     reply_markup = InlineKeyboardMarkup(keyboard)
     query.edit_message_text(
         text='''
-        link com os locais de postos de vacinação:
-        1-DF
-        2-SP
-        3-MG
-        4-RS
+        link de redirecionamento:
+        1-Agendamento
+        2-Cadastro de Comorbidades e Grupos Prioritários 
+        3-Consultar agendamento
+        4-Imprimir ficha de vacina
 
         Home - Inicio
         Close - Fechar
@@ -365,7 +365,7 @@ def linkagendamento(update: Update, context: CallbackContext) -> int:
     # Transfer to conversation state `SECOND`
     return FIRST
 
-def DF(update: Update, context: CallbackContext) -> int:
+def agendamento(update: Update, context: CallbackContext) -> int:
     """Show new choice of buttons"""
     query = update.callback_query
     query.answer()
@@ -382,13 +382,13 @@ def DF(update: Update, context: CallbackContext) -> int:
         ''', reply_markup=reply_markup
     )
     return FIRST
-def SP(update: Update, context: CallbackContext) -> int:
+def comorbidade(update: Update, context: CallbackContext) -> int:
     """Show new choice of buttons"""
     query = update.callback_query
     query.answer()
     keyboard = [
         [
-            webbrowser.open('https://vacina.saude.df.gov.br/')
+            webbrowser.open('https://vacina.saude.df.gov.br/Comorbidade')
         
         ]
     ]
@@ -400,13 +400,13 @@ def SP(update: Update, context: CallbackContext) -> int:
     )
     return FIRST 
 
-def MG(update: Update, context: CallbackContext) -> int:
+def consultar(update: Update, context: CallbackContext) -> int:
     """Show new choice of buttons"""
     query = update.callback_query
     query.answer()
     keyboard = [
         [
-            webbrowser.open('https://vacina.saude.df.gov.br/')
+            webbrowser.open('https://vacina.saude.df.gov.br/Home/Consultar')
         
         ]
     ]
@@ -417,13 +417,13 @@ def MG(update: Update, context: CallbackContext) -> int:
         ''', reply_markup=reply_markup
     )
     return FIRST
-def RS(update: Update, context: CallbackContext) -> int:
+def imprimir(update: Update, context: CallbackContext) -> int:
     """Show new choice of buttons"""
     query = update.callback_query
     query.answer()
     keyboard = [
         [
-            webbrowser.open('https://vacina.saude.df.gov.br/')
+            webbrowser.open('https://vacina.saude.df.gov.br/Home/Ficha')
         
         ]
     ]
