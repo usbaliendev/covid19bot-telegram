@@ -4,7 +4,10 @@ Send /start to initiate the conversation.
 Press Ctrl-C on the command line to stop the bot.
 """
 import logging
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+import requests
+import re
+import urllib
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, update
 from telegram.ext import (
     Updater,
     CommandHandler,
@@ -12,6 +15,8 @@ from telegram.ext import (
     ConversationHandler,
     CallbackContext,
 )
+
+imageAstrazenecaUrl = "https://drive.google.com/file/d/1dqZmAgNkv-KK1Ftlv-fHmhtdVoz2ZH8a/view?usp=sharing"
 
 # Enable logging
 logging.basicConfig(
@@ -23,8 +28,8 @@ logger = logging.getLogger(__name__)
 # Stages
 FIRST, SECOND = range(2)
 # Callback data
-LOC, DOSE1, DOSE2, DOSER85, PNOTURNO, SIX, SEVEN, CARE, MASK, START, END = range(
-    11)
+LOC, DOSE1, DOSE2, DOSER85, PNOTURNO, SIX, SEVEN, CARE, MASK, START, END, ASTRAZENECA = range(
+    12)
 
 
 def start(update: Update, context: CallbackContext) -> int:
@@ -152,7 +157,7 @@ def dose1(update: Update, context: CallbackContext) -> int:
         text='''
         Primeira dose. Qual grupo você faz parte?
         
-        1 - Tem entre 13 e 17 anos?
+        1 - Tem entre 12 e 17 anos?
         (Também gestantes e puéperas a partir dessa idade)
         2 - Tem 18 anos ou mais?
 
@@ -169,7 +174,7 @@ def dose2(update: Update, context: CallbackContext) -> int:
     query.answer()
     keyboard = [
         [
-            InlineKeyboardButton("1", callback_data=str(SEVEN)),
+            InlineKeyboardButton("1", callback_data=str(ASTRAZENECA)),
             InlineKeyboardButton("2", callback_data=str(SEVEN)),
             InlineKeyboardButton("3", callback_data=str(SEVEN)),
             InlineKeyboardButton("Voltar", callback_data=str(LOC)),
@@ -190,8 +195,6 @@ def dose2(update: Update, context: CallbackContext) -> int:
         Close - Fechar
         ''', reply_markup=reply_markup
     )
-    # Transfer to conversation state `SECOND`
-    return FIRST
 
 
 def doseR85(update: Update, context: CallbackContext) -> int:
@@ -271,6 +274,82 @@ def seven(update: Update, context: CallbackContext) -> int:
     )
     return FIRST
 
+
+def d2as (update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+            #Botoes de navegação padrao, SUPER ESSENCIAIS, adicionar outros botoes acima
+            InlineKeyboardButton("Voltar", callback_data=str(LOC)),
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    #Aqui se edita o output da caixa de msg
+    query.edit_message_text(
+        text='''
+        UBS 1 Asa Norte
+        UBS 1 Paranoá
+        UBS 1 Itapoã
+        UBS 3 Itapoã
+        UBS 1 J. Mangueiral
+        UBS 2 São Sebastião
+        Ginasio São Bartolomeu
+        Antiga Bibliot. Paranoá
+        UBS 3 Paranoá
+        UBS 9 São Sebastião
+        UBS 1 Gama
+        UBS 2 Gama
+        UBS 3 Gama
+        UBS 4 Gama
+        UBS 5 Gama
+        UBS 6 Gama
+
+        8H ÀS 17H
+        UBS 1 Santa Maria
+        UBS 2 Santa Maria
+        UBS 1 Ceilândia
+        UBS 2 Ceilândia
+        UBS 5 Ceilândia
+        UBS 6 Ceilândia
+        UBS 8 Ceilândia
+        UBS 9 Ceilândia
+        UBS 10 Ceilândia
+        UBS 11 Ceilândia
+        UBS 12 Ceilândia
+        UBS 16 Ceilândia
+        UBS 2 Brazlândia
+
+        8H ÀS 17H
+        UBS 1 Sobradinho
+        UBS 2 Sobradinho
+        UBS 3 Nova Colina
+        UBS 5 Basevi
+        UBS 1 Sobradinho II
+        UBS 2 Sobradinho II
+        UBS 1 Planaltina
+        UBS 2 Planaltina
+        UBS 4 Planaltina
+        UBS 5 Planaltina
+        UBS 9 Planaltina
+        UBS 11 Planaltina
+        UBS 20 Planaltina
+
+        8H ÀS 12H E DAS 13H30 ÀS 17H
+        HUB
+
+        18H ÀS 22H
+        Praça dos Cristais
+
+        8H ÀS 22H
+        UBS 3 Ceilândia
+        UBS 7 Ceilândia
+        ''', reply_markup=reply_markup
+    )
+    return FIRST
 
 def mascaras(update: Update, context: CallbackContext) -> int:
     """Show new choice of buttons"""
@@ -365,6 +444,7 @@ def main() -> None:
                     pnoturno, pattern='^' + str(PNOTURNO) + '$'),
                 CallbackQueryHandler(six, pattern='^' + str(SIX) + '$'),
                 CallbackQueryHandler(seven, pattern='^' + str(SEVEN) + '$'),
+                CallbackQueryHandler(d2as, pattern='^' + str(ASTRAZENECA) + '$'),
                 CallbackQueryHandler(mascaras, pattern='^' + str(MASK) + '$'),
                 CallbackQueryHandler(cuidados, pattern='^' + str(CARE) + '$'),
                 CallbackQueryHandler(
