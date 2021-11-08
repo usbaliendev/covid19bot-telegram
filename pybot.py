@@ -12,7 +12,7 @@ from telegram.ext import (
     ConversationHandler,
     CallbackContext,
 )
-
+import webbrowser
 # Enable logging
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
@@ -333,6 +333,107 @@ def end(update: Update, context: CallbackContext) -> int:
 
     query.edit_message_text(text="Nos vemos na próxima consulta!")
     return ConversationHandler.END
+
+def linkagendamento(update: Update, context: CallbackContext) -> int:
+
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+            InlineKeyboardButton("1", callback_data=str(DF)),
+            InlineKeyboardButton("2", callback_data=str(SP)),
+            InlineKeyboardButton("3", callback_data=str(MG)),
+            InlineKeyboardButton("4", callback_data=str(RS)),
+            InlineKeyboardButton("Voltar", callback_data=str(LOC)),
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''
+        link com os locais de postos de vacinação:
+        1-DF
+        2-SP
+        3-MG
+        4-RS
+
+        Home - Inicio
+        Close - Fechar
+        ''', reply_markup=reply_markup
+    )
+    # Transfer to conversation state `SECOND`
+    return FIRST
+
+def DF(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+            webbrowser.open('https://vacina.saude.df.gov.br/')
+        
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''
+   
+        ''', reply_markup=reply_markup
+    )
+    return FIRST
+def SP(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+            webbrowser.open('https://vacina.saude.df.gov.br/')
+        
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''
+   
+        ''', reply_markup=reply_markup
+    )
+    return FIRST 
+
+def MG(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+            webbrowser.open('https://vacina.saude.df.gov.br/')
+        
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''
+   
+        ''', reply_markup=reply_markup
+    )
+    return FIRST
+def RS(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+            webbrowser.open('https://vacina.saude.df.gov.br/')
+        
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''
+   
+        ''', reply_markup=reply_markup
+    )
+    return FIRST       
 
 
 def main() -> None:
