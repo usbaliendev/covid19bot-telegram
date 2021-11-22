@@ -335,7 +335,6 @@ def linkredirecionamento(update: Update, context: CallbackContext) -> int:
             InlineKeyboardButton("1", callback_data=str(COMORBIDADE)),
             InlineKeyboardButton("2", callback_data=str(CONSULTAR)),
             InlineKeyboardButton("3", callback_data=str(IMPRIMIR)),
-            InlineKeyboardButton("Voltar", callback_data=str(LOC)),
             InlineKeyboardButton("Home", callback_data=str(START)),
             InlineKeyboardButton("Close", callback_data=str(END)),
         ]
