@@ -4,7 +4,7 @@ Send /start to initiate the conversation.
 Press Ctrl-C on the command line to stop the bot.
 """
 import logging
-from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update
+from telegram import InlineKeyboardButton, InlineKeyboardMarkup, Update, replymarkup
 from telegram.ext import (
     Updater,
     CommandHandler,
@@ -12,8 +12,7 @@ from telegram.ext import (
     ConversationHandler,
     CallbackContext,
 )
-import datetime
-
+import webbrowser
 # Enable logging
 logging.basicConfig(
     format='%(asctime)s - %(name)s - %(levelname)s - %(message)s', level=logging.INFO
@@ -24,8 +23,8 @@ logger = logging.getLogger(__name__)
 # Stages
 FIRST, SECOND = range(2)
 # Callback data
-LOC, DOSE1, DOSE2, DOSER85, PNOTURNO, SIX, SEVEN, TAXAEFICACIA, EFIASTRAZENECA, EFICORONA, EFIPFIZER, OPCOES2, NOVAVARIANTE, TERCEIRADOSE, COMOFUNCIONAVACINA, STATUS2DOSE, CARE, MASK, START, END, ASTRA2DOSE, CORONA2DOSE, PFIZER2DOSE = range(
-    23)
+LOC, DOSE1, DOSE2, DOSER85, PNOTURNO, SIX, SEVEN, TAXAEFICACIA, EFIASTRAZENECA, EFICORONA, EFIPFIZER, OPCOES2, NOVAVARIANTE, TERCEIRADOSE, COMOFUNCIONAVACINA, STATUS2DOSE, CARE, MASK, START, END, ASTRA2DOSE, CORONA2DOSE, PFIZER2DOSE, AGENDAMENTO, COMORBIDADE, CONSULTAR, IMPRIMIR, LINKREDIRECIONAMENTO = range(
+    28)
 
 
 def start(update: Update, context: CallbackContext) -> int:
@@ -44,7 +43,7 @@ def start(update: Update, context: CallbackContext) -> int:
             InlineKeyboardButton("3", callback_data=str(CARE)),
             InlineKeyboardButton("4", callback_data=str(TAXAEFICACIA)),
             InlineKeyboardButton("5", callback_data=str(STATUS2DOSE)),
-            InlineKeyboardButton("6", callback_data=str(SEVEN)),
+            InlineKeyboardButton("6", callback_data=str(LINKREDIRECIONAMENTO)),
             InlineKeyboardButton("...", callback_data=str(OPCOES2)),
         ]
     ]
@@ -57,9 +56,9 @@ def start(update: Update, context: CallbackContext) -> int:
         2 - Máscaras Recomendadas
         3 - Cuidados e Profilaxia
         4 - Taxa de eficácia das vacinas
-        5 - Tempo de intervalo das doses (Remind me)
-        6 - Outras funcionalidades em desenvolvimento..
-        7 - TESTE DE ATUALIZACAO
+        5 - Tempo de intervalo das doses
+        6 - Link de redirecionamento (agendamento,cadastro,consulta e imprimir)
+
         ''', reply_markup=reply_markup)
     # Tell ConversationHandler that we're in state `FIRST` now
     return FIRST
@@ -79,7 +78,7 @@ def start_over(update: Update, context: CallbackContext) -> int:
             InlineKeyboardButton("3", callback_data=str(CARE)),
             InlineKeyboardButton("4", callback_data=str(TAXAEFICACIA)),
             InlineKeyboardButton("5", callback_data=str(STATUS2DOSE)),
-            InlineKeyboardButton("6", callback_data=str(SEVEN)),
+            InlineKeyboardButton("6", callback_data=str(LINKREDIRECIONAMENTO)),
             InlineKeyboardButton("...", callback_data=str(OPCOES2)),
         ]
     ]
@@ -94,9 +93,8 @@ def start_over(update: Update, context: CallbackContext) -> int:
         2 - Máscaras Recomendadas
         3 - Cuidados e Profilaxia
         4 - Taxa de eficácia das vacinas
-        5 - Tempo de intervalo das doses (Remind me)
-        6 - Outras funcionalidades em desenvolvimento..
-        7 - TESTE DE ATUALIZACAO
+        5 - Tempo de intervalo das doses
+        6 - Link de redirecionamento
         ''', reply_markup=reply_markup)
     return FIRST
 
@@ -107,12 +105,7 @@ def locais(update: Update, context: CallbackContext) -> int:
     query.answer()
     keyboard = [
         [
-            InlineKeyboardButton("D1", callback_data=str(DOSE1)),
-            InlineKeyboardButton("D2", callback_data=str(DOSE2)),
-            InlineKeyboardButton("D85+",
-                                 callback_data=str(DOSER85)),
-            InlineKeyboardButton(
-                "PN", callback_data=str(PNOTURNO)),
+
             InlineKeyboardButton("Home", callback_data=str(START)),
             InlineKeyboardButton("Close", callback_data=str(END)),
 
@@ -120,15 +113,9 @@ def locais(update: Update, context: CallbackContext) -> int:
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     query.edit_message_text(
-        text='''Qual a dose você procura?
+        text='''Abaixo temos o link do site oficial da secretaria de saúde que disponibiliza os locais e os horários das vacinas para pessoas de todas as idades. \nO site contem primeiras doses, segundas doses, doses adicionais, doses de reforço e postos noturnos. A pagina é oficial e é atualizada regularmente.
 
-        D1 - Primeira dose
-        D2 - Segunda dose
-        D85+ - Dose de reforço +85
-        PN - Postos Noturnos
-
-        Home - Inicio
-        Close - Fechar
+        https://www.saude.df.gov.br/locaisdevacinacao/
         ''', reply_markup=reply_markup
     )
     return FIRST
@@ -269,6 +256,190 @@ def seven(update: Update, context: CallbackContext) -> int:
         
         Funcionalidade em desenvolvimento''', reply_markup=reply_markup
     )
+    return FIRST
+
+
+def mascaras(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''2 - Máscaras Recomendadas contra a Covid-19: guia mostra os melhores tipos e as combinações mais eficientes
+        
+         - Máscaras PFF2 (ou N95)
+        https://d24ji74u9qkhok.cloudfront.net/wp-content/uploads/2020/04/mascaras_page-0001-768x432.jpg
+        - Máscaras KN95
+        https://http2.mlstatic.com/D_NQ_NP_870886-MLB45514116642_042021-O.jpg
+        - Máscaras elastoméricas
+        https://a-static.mlcdn.com.br/1500x1500/mascara-semifacial-gvs-elipse-p3r-anti-odor-m-g/tuzaferramentaseepi/4da78a0c7ec811eab21e4201ac18501e/7494ae109efefffa302f7d2044302cfc.jpg
+        - Máscaras com válvula
+        https://a-static.mlcdn.com.br/618x463/mascara-p2-com-valvula-delta-plus/sanchesby/8810170620/fda07a0150d5bf6dafa1653cc141476c.jpg
+        - Máscaras cirúrgicas ou de procedimentos
+        https://cirurgicaeldorado.com.br/wp-content/uploads/2020/02/Mascara-Cirurgica.jpeg
+        - Máscaras de pano com 3 camadas (Apenas em ultimo caso de falta/emergencia)
+        ''', reply_markup=reply_markup
+    )
+    return SECOND
+
+
+def cuidados(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''Para evitar a propagação da COVID-19, siga estas orientações
+        
+        Mantenha uma distância segura de outras pessoas, mesmo que elas não pareçam estar doentes.
+        Use máscara em público, especialmente em locais fechados ou quando não for possível manter o distanciamento físico.
+        Prefira locais abertos e bem ventilados em vez de ambientes fechados. Abra uma janela se estiver em um local fechado.
+        Limpe as mãos com frequência. Use sabão e água ou álcool em gel.
+        Tome a vacina quando chegar a sua vez. Siga as orientações locais para isso.
+        Cubra o nariz e a boca com o braço dobrado ou um lenço ao tossir ou espirrar.
+        Fique em casa se você sentir indisposição.
+        ''', reply_markup=reply_markup
+    )
+    return SECOND
+
+
+def end(update: Update, context: CallbackContext) -> int:
+    """Returns `ConversationHandler.END`, which tells the
+    ConversationHandler that the conversation is over.
+    """
+    query = update.callback_query
+    query.answer()
+
+    query.edit_message_text(text="Nos vemos na próxima consulta!")
+    return ConversationHandler.END
+
+
+def linkredirecionamento(update: Update, context: CallbackContext) -> int:
+
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+            InlineKeyboardButton("1", callback_data=str(COMORBIDADE)),
+            InlineKeyboardButton("2", callback_data=str(CONSULTAR)),
+            InlineKeyboardButton("3", callback_data=str(IMPRIMIR)),
+            InlineKeyboardButton("Voltar", callback_data=str(LOC)),
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''
+        link de redirecionamento:
+        1- Cadastro de Comorbidades e Grupos Prioritários
+        2- Consultar agendamento
+        3- Imprimir ficha de vacina
+
+
+        Home - Inicio
+        Close - Fechar
+        ''', reply_markup=reply_markup
+    )
+    # Transfer to conversation state `SECOND`
+    return FIRST
+
+
+def agendamento(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    query = update.callback_query
+    query.answer()
+
+    query.edit_message_text(
+        text='''
+            'https://vacina.saude.df.gov.br/'
+        ''', reply_markup=replymarkup
+    )
+    return FIRST
+
+
+def comorbidade(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+
+            InlineKeyboardButton(
+                "Voltar", callback_data=str(LINKREDIRECIONAMENTO)),
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''https://vacina.saude.df.gov.br/Comorbidade
+
+        ''', reply_markup=reply_markup
+    )
+    # Transfer to conversation state `SECOND`
+    return FIRST
+
+
+def consultar(update: Update, context: CallbackContext) -> int:
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+
+            InlineKeyboardButton(
+                "Voltar", callback_data=str(LINKREDIRECIONAMENTO)),
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''https://vacina.saude.df.gov.br/Home/Consultar
+
+
+        ''', reply_markup=reply_markup
+    )
+    # Transfer to conversation state `SECOND`
+    return FIRST
+
+
+def imprimir(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    keyboard = [
+        [
+
+            InlineKeyboardButton(
+                "Voltar", callback_data=str(LINKREDIRECIONAMENTO)),
+            InlineKeyboardButton("Home", callback_data=str(START)),
+            InlineKeyboardButton("Close", callback_data=str(END)),
+        ]
+    ]
+    reply_markup = InlineKeyboardMarkup(keyboard)
+    query.edit_message_text(
+        text='''https://vacina.saude.df.gov.br/Home/Ficha
+
+
+        ''', reply_markup=reply_markup
+    )
+    # Transfer to conversation state `SECOND`
     return FIRST
 
 
@@ -486,76 +657,6 @@ def novavariante(update: Update, context: CallbackContext) -> int:
     return FIRST
 
 
-def mascaras(update: Update, context: CallbackContext) -> int:
-    """Show new choice of buttons"""
-    query = update.callback_query
-    query.answer()
-    keyboard = [
-        [
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
-        ]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    query.edit_message_text(
-        text='''2 - Máscaras Recomendadas contra a Covid-19: guia mostra os melhores tipos e as combinações mais eficientes
-        
-        - Máscaras PFF2 (ou N95)
-        - Máscaras KN95
-        - Máscaras elastoméricas
-        - Máscaras com válvula
-        - Máscaras cirúrgicas ou de procedimentos
-        - Máscaras de pano com 3 camadas (Apenas em ultimo caso de falta/emergencia)
-        ''', reply_markup=reply_markup
-    )
-    return SECOND
-
-
-def cuidados(update: Update, context: CallbackContext) -> int:
-    """Show new choice of buttons"""
-    query = update.callback_query
-    query.answer()
-    keyboard = [
-        [
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
-        ]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    query.edit_message_text(
-        text='''Para evitar a propagação da COVID-19, siga estas orientações
-        
-        Mantenha uma distância segura de outras pessoas, mesmo que elas não pareçam estar doentes.
-        Use máscara em público, especialmente em locais fechados ou quando não for possível manter o distanciamento físico.
-        Prefira locais abertos e bem ventilados em vez de ambientes fechados. Abra uma janela se estiver em um local fechado.
-        Limpe as mãos com frequência. Use sabão e água ou álcool em gel.
-        Tome a vacina quando chegar a sua vez. Siga as orientações locais para isso.
-        Cubra o nariz e a boca com o braço dobrado ou um lenço ao tossir ou espirrar.
-        Fique em casa se você sentir indisposição.
-        ''', reply_markup=reply_markup
-    )
-    return SECOND
-
-
-def quandoTomarSegundaDose(vacina, ano, mes, dia):
-
-    dataVacina = datetime.date(ano, mes, dia)
-    tCoronaVac = datetime.timedelta(14)
-    tAstrazeneca = datetime.timedelta(56)
-    tPfizer = datetime.timedelta(56)
-
-    if vacina == 'coronavac' or vacina == 'CoronaVAC' or vacina == 'CORONAVAC':
-        dataSegundaDose = dataVacina + tCoronaVac
-    if vacina == 'Astrazeneca' or vacina == 'astrazeneca' or vacina == "ASTRAZENECA":
-        dataSegundaDose = dataVacina + tAstrazeneca
-    if vacina == 'pfizer' or vacina == 'Pfizer' or vacina == 'PFIZER':
-        dataSegundaDose = dataVacina + tPfizer
-    else:
-        'Vacina inválida'
-
-    return dataSegundaDose
-
-
 def status2dose(update: Update, context: CallbackContext) -> int:
     """Show new choice of buttons"""
     query = update.callback_query
@@ -571,7 +672,7 @@ def status2dose(update: Update, context: CallbackContext) -> int:
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     query.edit_message_text(
-        text='''Qual segunda dose gostaria de saber quando tomar?
+        text='''Gostaria de saber o intervalo da segunda dose de qual vacina?
 
         1 - Astrazeneca 
         2 - CoronaVac
@@ -596,7 +697,7 @@ def astra2dose(update: Update, context: CallbackContext) -> int:
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     query.edit_message_text(
-        text='''Astrazeneca: 2 doses, com intervalo de 8 semanas;
+        text='''Astrazeneca: intervalo de 8 semanas;
 
 
         ''', reply_markup=reply_markup
@@ -618,7 +719,7 @@ def corona2dose(update: Update, context: CallbackContext) -> int:
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     query.edit_message_text(
-        text='''Coronavac: 2 doses, com intervalo de 2 a 4 semanas;
+        text='''Coronavac: intervalo de 2 a 4 semanas;
 
 
         ''', reply_markup=reply_markup
@@ -640,23 +741,12 @@ def pfizer2dose(update: Update, context: CallbackContext) -> int:
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     query.edit_message_text(
-        text='''Pfizer e BioNTech: 2 doses, com intervalo de 8 semanas;
+        text='''Pfizer: intervalo de 8 semanas;
 
 
         ''', reply_markup=reply_markup
     )
     return FIRST
-
-
-def end(update: Update, context: CallbackContext) -> int:
-    """Returns `ConversationHandler.END`, which tells the
-    ConversationHandler that the conversation is over.
-    """
-    query = update.callback_query
-    query.answer()
-
-    query.edit_message_text(text="Nos vemos na próxima consulta!")
-    return ConversationHandler.END
 
 
 def main() -> None:
@@ -708,6 +798,18 @@ def main() -> None:
                 CallbackQueryHandler(mascaras, pattern='^' + str(MASK) + '$'),
                 CallbackQueryHandler(cuidados, pattern='^' + str(CARE) + '$'),
                 CallbackQueryHandler(
+                    comorbidade, pattern='^' + str(COMORBIDADE) + '$'),
+                CallbackQueryHandler(
+                    consultar, pattern='^' + str(CONSULTAR) + '$'),
+                CallbackQueryHandler(
+                    imprimir, pattern='^' + str(IMPRIMIR) + '$'),
+                CallbackQueryHandler(
+                    imprimir, pattern='^' + str(IMPRIMIR) + '$'),
+                CallbackQueryHandler(
+                    linkredirecionamento, pattern='^' + str(LINKREDIRECIONAMENTO) + '$'),
+                CallbackQueryHandler(
+                    agendamento, pattern='^' + str(AGENDAMENTO) + '$'),
+                CallbackQueryHandler(
                     status2dose, pattern='^' + str(STATUS2DOSE) + '$'),
                 CallbackQueryHandler(
                     astra2dose, pattern='^' + str(ASTRA2DOSE) + '$'),
@@ -718,7 +820,6 @@ def main() -> None:
                 CallbackQueryHandler(
                     start_over, pattern='^' + str(START) + '$'),
                 CallbackQueryHandler(end, pattern='^' + str(END) + '$'),
-
             ],
             SECOND: [
                 CallbackQueryHandler(
@@ -728,7 +829,6 @@ def main() -> None:
         },
         fallbacks=[CommandHandler('start', start)],
     )
-
     # Add ConversationHandler to dispatcher that will be used for handling updates
     dispatcher.add_handler(conv_handler)
 
