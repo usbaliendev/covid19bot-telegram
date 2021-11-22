@@ -23,8 +23,10 @@ logger = logging.getLogger(__name__)
 # Stages
 FIRST, SECOND = range(2)
 # Callback data
-LOC, DOSE1, DOSE2, DOSER85, PNOTURNO, SIX, SEVEN, TAXAEFICACIA, EFIASTRAZENECA, EFICORONA, EFIPFIZER, OPCOES2, NOVAVARIANTE, TERCEIRADOSE, COMOFUNCIONAVACINA, STATUS2DOSE, CARE, MASK, START, END, ASTRA2DOSE, CORONA2DOSE, PFIZER2DOSE, AGENDAMENTO, COMORBIDADE, CONSULTAR, IMPRIMIR, LINKREDIRECIONAMENTO = range(
+LOC, DOSE1, D1217, D18, DOSE2, DOSER85, PNOTURNO, TAXAEFICACIA, EFIASTRAZENECA, EFICORONA, EFIPFIZER, OPCOES2, NOVAVARIANTE, TERCEIRADOSE, COMOFUNCIONAVACINA, STATUS2DOSE, CARE, MASK, START, END, ASTRA2DOSE, CORONA2DOSE, PFIZER2DOSE, AGENDAMENTO, COMORBIDADE, CONSULTAR, IMPRIMIR, LINKREDIRECIONAMENTO = range(
     28)
+
+# ---------------------------------------- INICIO ----------------------------------------
 
 
 def start(update: Update, context: CallbackContext) -> int:
@@ -42,9 +44,12 @@ def start(update: Update, context: CallbackContext) -> int:
             InlineKeyboardButton("2", callback_data=str(MASK)),
             InlineKeyboardButton("3", callback_data=str(CARE)),
             InlineKeyboardButton("4", callback_data=str(TAXAEFICACIA)),
+        ], [
             InlineKeyboardButton("5", callback_data=str(STATUS2DOSE)),
             InlineKeyboardButton("6", callback_data=str(LINKREDIRECIONAMENTO)),
             InlineKeyboardButton("...", callback_data=str(OPCOES2)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
+
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -58,10 +63,12 @@ def start(update: Update, context: CallbackContext) -> int:
         4 - Taxa de eficácia das vacinas
         5 - Tempo de intervalo das doses
         6 - Link de redirecionamento (agendamento,cadastro,consulta e imprimir)
-
+        ... - Mais informações da vacina
         ''', reply_markup=reply_markup)
     # Tell ConversationHandler that we're in state `FIRST` now
     return FIRST
+
+# ---------------------------------------- RESTART ----------------------------------------
 
 
 def start_over(update: Update, context: CallbackContext) -> int:
@@ -77,9 +84,11 @@ def start_over(update: Update, context: CallbackContext) -> int:
             InlineKeyboardButton("2", callback_data=str(MASK)),
             InlineKeyboardButton("3", callback_data=str(CARE)),
             InlineKeyboardButton("4", callback_data=str(TAXAEFICACIA)),
+        ], [
             InlineKeyboardButton("5", callback_data=str(STATUS2DOSE)),
             InlineKeyboardButton("6", callback_data=str(LINKREDIRECIONAMENTO)),
             InlineKeyboardButton("...", callback_data=str(OPCOES2)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -87,16 +96,19 @@ def start_over(update: Update, context: CallbackContext) -> int:
     # originated the CallbackQuery. This gives the feeling of an
     # interactive menu.
     query.edit_message_text(
-        text='''Fluxo reinciado. Selecione a ação desejada:
+        text='''Olá bem vindo ao seu parceiro informativo de Covid-19 do DF. Selecione a ação desejada:
 
         1 - Locais Postos de vacinação
         2 - Máscaras Recomendadas
         3 - Cuidados e Profilaxia
         4 - Taxa de eficácia das vacinas
         5 - Tempo de intervalo das doses
-        6 - Link de redirecionamento
+        6 - Link de redirecionamento (agendamento,cadastro,consulta e imprimir)
+        ... - Mais informações da vacina
         ''', reply_markup=reply_markup)
     return FIRST
+
+# ---------------------------------------- LOCAIS ----------------------------------------
 
 
 def locais(update: Update, context: CallbackContext) -> int:
@@ -106,8 +118,8 @@ def locais(update: Update, context: CallbackContext) -> int:
     keyboard = [
         [
 
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
 
         ]
     ]
@@ -120,143 +132,7 @@ def locais(update: Update, context: CallbackContext) -> int:
     )
     return FIRST
 
-
-def dose1(update: Update, context: CallbackContext) -> int:
-    """Show new choice of buttons"""
-    query = update.callback_query
-    query.answer()
-    keyboard = [
-        [
-            InlineKeyboardButton("1", callback_data=str(SEVEN)),
-            InlineKeyboardButton("2", callback_data=str(SEVEN)),
-            InlineKeyboardButton("Voltar", callback_data=str(LOC)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
-        ]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    query.edit_message_text(
-        text='''
-        Primeira dose. Qual grupo você faz parte?
-        
-        1 - Tem entre 13 e 17 anos?
-        (Também gestantes e puéperas a partir dessa idade)
-        2 - Tem 18 anos ou mais?
-
-        Home - Inicio
-        Close - Fechar
-        ''', reply_markup=reply_markup
-    )
-    return FIRST
-
-
-def dose2(update: Update, context: CallbackContext) -> int:
-    """Show new choice of buttons"""
-    query = update.callback_query
-    query.answer()
-    keyboard = [
-        [
-            InlineKeyboardButton("1", callback_data=str(SEVEN)),
-            InlineKeyboardButton("2", callback_data=str(SEVEN)),
-            InlineKeyboardButton("3", callback_data=str(SEVEN)),
-            InlineKeyboardButton("Voltar", callback_data=str(LOC)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
-        ]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    query.edit_message_text(
-        text='''
-        Segunda dose. Qual grupo você faz parte?
-        
-        1 - D2 ASTRAZENECA
-        2 - D2 CORONAVAC
-        3 - D2 PFIZER-BIONTECH
-
-        Home - Inicio
-        Close - Fechar
-        ''', reply_markup=reply_markup
-    )
-    # Transfer to conversation state `SECOND`
-    return FIRST
-
-
-def doseR85(update: Update, context: CallbackContext) -> int:
-    """Show new choice of buttons"""
-    query = update.callback_query
-    query.answer()
-    keyboard = [
-        [
-            InlineKeyboardButton("Voltar", callback_data=str(LOC)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
-        ]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    query.edit_message_text(
-        text='''DOSE DE REFORÇO
-        
-        Funcionalidade em desenvolvimento''', reply_markup=reply_markup
-    )
-    return FIRST
-
-
-def pnoturno(update: Update, context: CallbackContext) -> int:
-    """Show new choice of buttons"""
-    query = update.callback_query
-    query.answer()
-    keyboard = [
-        [
-            InlineKeyboardButton("Voltar", callback_data=str(LOC)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
-        ]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    query.edit_message_text(
-        text='''POSTOS NOTURNOS
-        
-        Funcionalidade em desenvolvimento''', reply_markup=reply_markup
-    )
-    return FIRST
-
-
-def six(update: Update, context: CallbackContext) -> int:
-    """Show new choice of buttons"""
-    query = update.callback_query
-    query.answer()
-    keyboard = [
-        [
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
-        ]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    query.edit_message_text(
-        text='''**************
-        
-        Funcionalidade em desenvolvimento''', reply_markup=reply_markup
-    )
-    return FIRST
-
-
-def seven(update: Update, context: CallbackContext) -> int:
-    """Show new choice of buttons"""
-    query = update.callback_query
-    query.answer()
-    keyboard = [
-        [
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
-        ]
-    ]
-    reply_markup = InlineKeyboardMarkup(keyboard)
-    query.edit_message_text(
-        text='''***************
-        
-        Funcionalidade em desenvolvimento''', reply_markup=reply_markup
-    )
-    return FIRST
+# ---------------------------------------- MASCARAS ----------------------------------------
 
 
 def mascaras(update: Update, context: CallbackContext) -> int:
@@ -265,8 +141,8 @@ def mascaras(update: Update, context: CallbackContext) -> int:
     query.answer()
     keyboard = [
         [
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -288,6 +164,8 @@ def mascaras(update: Update, context: CallbackContext) -> int:
     )
     return SECOND
 
+# ---------------------------------------- CUIDADOS ----------------------------------------
+
 
 def cuidados(update: Update, context: CallbackContext) -> int:
     """Show new choice of buttons"""
@@ -295,8 +173,8 @@ def cuidados(update: Update, context: CallbackContext) -> int:
     query.answer()
     keyboard = [
         [
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -314,16 +192,7 @@ def cuidados(update: Update, context: CallbackContext) -> int:
     )
     return SECOND
 
-
-def end(update: Update, context: CallbackContext) -> int:
-    """Returns `ConversationHandler.END`, which tells the
-    ConversationHandler that the conversation is over.
-    """
-    query = update.callback_query
-    query.answer()
-
-    query.edit_message_text(text="Nos vemos na próxima consulta!")
-    return ConversationHandler.END
+# ---------------------------------------- REDIRECIONAMENTO ----------------------------------------
 
 
 def linkredirecionamento(update: Update, context: CallbackContext) -> int:
@@ -335,40 +204,26 @@ def linkredirecionamento(update: Update, context: CallbackContext) -> int:
             InlineKeyboardButton("1", callback_data=str(COMORBIDADE)),
             InlineKeyboardButton("2", callback_data=str(CONSULTAR)),
             InlineKeyboardButton("3", callback_data=str(IMPRIMIR)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+        ],[
+            InlineKeyboardButton("◀️", callback_data=str(START)),
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     query.edit_message_text(
         text='''
-        link de redirecionamento:
+            Links de redirecionamento:
+
         1- Cadastro de Comorbidades e Grupos Prioritários
         2- Consultar agendamento
         3- Imprimir ficha de vacina
-
-
-        Home - Inicio
-        Close - Fechar
         ''', reply_markup=reply_markup
     )
     # Transfer to conversation state `SECOND`
     return FIRST
 
-
-def agendamento(update: Update, context: CallbackContext) -> int:
-    """Show new choice of buttons"""
-    query = update.callback_query
-    query.answer()
-    query = update.callback_query
-    query.answer()
-
-    query.edit_message_text(
-        text='''
-            'https://vacina.saude.df.gov.br/'
-        ''', reply_markup=replymarkup
-    )
-    return FIRST
+# ---------------------------------------- COMORBIDADE ----------------------------------------
 
 
 def comorbidade(update: Update, context: CallbackContext) -> int:
@@ -380,19 +235,41 @@ def comorbidade(update: Update, context: CallbackContext) -> int:
         [
 
             InlineKeyboardButton(
-                "Voltar", callback_data=str(LINKREDIRECIONAMENTO)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+                "◀️", callback_data=str(LINKREDIRECIONAMENTO)),
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     query.edit_message_text(
-        text='''https://vacina.saude.df.gov.br/Comorbidade
+        text='''Cadastro de Comorbidades e Grupos Prioritários
+        
+        https://vacina.saude.df.gov.br/Comorbidade
 
         ''', reply_markup=reply_markup
     )
     # Transfer to conversation state `SECOND`
     return FIRST
+
+# ---------------------------------------- AGENDAMENTO ----------------------------------------
+
+
+def agendamento(update: Update, context: CallbackContext) -> int:
+    """Show new choice of buttons"""
+    query = update.callback_query
+    query.answer()
+    query = update.callback_query
+    query.answer()
+
+    query.edit_message_text(
+        text='''
+        'https://vacina.saude.df.gov.br/'
+        ''', reply_markup=replymarkup
+    )
+    return FIRST
+
+
+# ---------------------------------------- CONSULTAR ----------------------------------------
 
 
 def consultar(update: Update, context: CallbackContext) -> int:
@@ -402,20 +279,22 @@ def consultar(update: Update, context: CallbackContext) -> int:
         [
 
             InlineKeyboardButton(
-                "Voltar", callback_data=str(LINKREDIRECIONAMENTO)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+                "◀️", callback_data=str(LINKREDIRECIONAMENTO)),
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     query.edit_message_text(
-        text='''https://vacina.saude.df.gov.br/Home/Consultar
+        text='''Consultar agendamento da vacina
 
-
+    https://vacina.saude.df.gov.br/Home/Consultar
         ''', reply_markup=reply_markup
     )
     # Transfer to conversation state `SECOND`
     return FIRST
+
+# ---------------------------------------- IMPRIMIR ----------------------------------------
 
 
 def imprimir(update: Update, context: CallbackContext) -> int:
@@ -426,20 +305,22 @@ def imprimir(update: Update, context: CallbackContext) -> int:
         [
 
             InlineKeyboardButton(
-                "Voltar", callback_data=str(LINKREDIRECIONAMENTO)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+                "◀️", callback_data=str(LINKREDIRECIONAMENTO)),
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     query.edit_message_text(
-        text='''https://vacina.saude.df.gov.br/Home/Ficha
-
-
+        text='''Link para imprimir ficha de vacina
+        
+        https://vacina.saude.df.gov.br/Home/Ficha
         ''', reply_markup=reply_markup
     )
     # Transfer to conversation state `SECOND`
     return FIRST
+
+# ---------------------------------------- TAXA EFICIENCIA ----------------------------------------
 
 
 def taxaeficacia(update: Update, context: CallbackContext) -> int:
@@ -451,8 +332,9 @@ def taxaeficacia(update: Update, context: CallbackContext) -> int:
             InlineKeyboardButton("1", callback_data=str(EFIASTRAZENECA)),
             InlineKeyboardButton("2", callback_data=str(EFICORONA)),
             InlineKeyboardButton("3", callback_data=str(EFIPFIZER)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+        ],[
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -466,6 +348,8 @@ def taxaeficacia(update: Update, context: CallbackContext) -> int:
     )
     return FIRST
 
+# ---------------------------------------- EFICACIA ASTRAZENECA ----------------------------------------
+
 
 def efiastrazeneca(update: Update, context: CallbackContext) -> int:
     """Show new choice of buttons"""
@@ -473,9 +357,9 @@ def efiastrazeneca(update: Update, context: CallbackContext) -> int:
     query.answer()
     keyboard = [
         [
-            InlineKeyboardButton("Voltar", callback_data=str(TAXAEFICACIA)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+            InlineKeyboardButton("◀️", callback_data=str(TAXAEFICACIA)),
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -491,6 +375,8 @@ def efiastrazeneca(update: Update, context: CallbackContext) -> int:
     )
     return FIRST
 
+# ---------------------------------------- EFICACIA CORNAVAC ----------------------------------------
+
 
 def eficorona(update: Update, context: CallbackContext) -> int:
     """Show new choice of buttons"""
@@ -498,9 +384,9 @@ def eficorona(update: Update, context: CallbackContext) -> int:
     query.answer()
     keyboard = [
         [
-            InlineKeyboardButton("Voltar", callback_data=str(TAXAEFICACIA)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+            InlineKeyboardButton("◀️", callback_data=str(TAXAEFICACIA)),
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -516,6 +402,8 @@ def eficorona(update: Update, context: CallbackContext) -> int:
     )
     return FIRST
 
+# ---------------------------------------- EFICACIA PFIZER ----------------------------------------
+
 
 def efipfizer(update: Update, context: CallbackContext) -> int:
     """Show new choice of buttons"""
@@ -523,15 +411,15 @@ def efipfizer(update: Update, context: CallbackContext) -> int:
     query.answer()
     keyboard = [
         [
-            InlineKeyboardButton("Voltar", callback_data=str(TAXAEFICACIA)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+            InlineKeyboardButton("◀️", callback_data=str(TAXAEFICACIA)),
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     query.edit_message_text(
         text='''
-        2 - Pfizer
+        3 - Pfizer
 
         A vacina apresentou 95% de eficácia contra infecção e 100% contra casos graves da doença.
 
@@ -540,6 +428,8 @@ def efipfizer(update: Update, context: CallbackContext) -> int:
         ''', reply_markup=reply_markup
     )
     return FIRST
+
+# ---------------------------------------- OPCOES 2 ----------------------------------------
 
 
 def opcoes2(update: Update, context: CallbackContext) -> int:
@@ -551,8 +441,9 @@ def opcoes2(update: Update, context: CallbackContext) -> int:
             InlineKeyboardButton("1", callback_data=str(COMOFUNCIONAVACINA)),
             InlineKeyboardButton("2", callback_data=str(TERCEIRADOSE)),
             InlineKeyboardButton("3", callback_data=str(NOVAVARIANTE)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+        ],[
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -562,12 +453,11 @@ def opcoes2(update: Update, context: CallbackContext) -> int:
         1 - Como a vacina funciona
         2 - É preciso tomar terceira dose?
         3 - A vacina contra a nova variante
-
-
-
         ''', reply_markup=reply_markup
     )
     return FIRST
+
+# ---------------------------------------- COMO FUNCIONA A VACINA ----------------------------------------
 
 
 def comofunciona(update: Update, context: CallbackContext) -> int:
@@ -576,9 +466,9 @@ def comofunciona(update: Update, context: CallbackContext) -> int:
     query.answer()
     keyboard = [
         [
-            InlineKeyboardButton("Voltar", callback_data=str(OPCOES2)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+            InlineKeyboardButton("◀️", callback_data=str(OPCOES2)),
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -596,6 +486,8 @@ def comofunciona(update: Update, context: CallbackContext) -> int:
     )
     return FIRST
 
+# ---------------------------------------- TERCEIRA DOSE ----------------------------------------
+
 
 def terceiradose(update: Update, context: CallbackContext) -> int:
     """Show new choice of buttons"""
@@ -603,9 +495,9 @@ def terceiradose(update: Update, context: CallbackContext) -> int:
     query.answer()
     keyboard = [
         [
-            InlineKeyboardButton("Voltar", callback_data=str(OPCOES2)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+            InlineKeyboardButton("◀️", callback_data=str(OPCOES2)),
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -618,11 +510,12 @@ def terceiradose(update: Update, context: CallbackContext) -> int:
 
         Em Portugal, a Agência Europeia de Medicamentos autorizou a aplicação da terceira dose da vacina contra a COVID-19 com Pfizer para pessoas acima dos 65 anos e que foram vacinadas com esse imunizante, e com Moderna para pessoas a partir dos 18 anos 6 a 8 meses após completar o esquema vacinal, sendo recomendada meia dose.
 
-
         fonte: https://www.tuasaude.com/vacina-covid/
         ''', reply_markup=reply_markup
     )
     return FIRST
+
+# ---------------------------------------- NOVA VARIANTE ----------------------------------------
 
 
 def novavariante(update: Update, context: CallbackContext) -> int:
@@ -632,9 +525,9 @@ def novavariante(update: Update, context: CallbackContext) -> int:
     keyboard = [
         [
 
-            InlineKeyboardButton("Voltar", callback_data=str(OPCOES2)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+            InlineKeyboardButton("◀️", callback_data=str(OPCOES2)),
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -647,13 +540,12 @@ def novavariante(update: Update, context: CallbackContext) -> int:
 
         É esperado que, ao longo do tempo, e à medida que vão surgindo novas variantes, que a composição das vacinas seja gradualmente atualizada, para conferir maior proteção.
 
-
-
-
         fonte: https://www.tuasaude.com/vacina-covid/
         ''', reply_markup=reply_markup
     )
     return FIRST
+
+# ---------------------------------------- INTERVALO DOSE 2 ----------------------------------------
 
 
 def status2dose(update: Update, context: CallbackContext) -> int:
@@ -665,8 +557,9 @@ def status2dose(update: Update, context: CallbackContext) -> int:
             InlineKeyboardButton("1", callback_data=str(ASTRA2DOSE)),
             InlineKeyboardButton("2", callback_data=str(CORONA2DOSE)),
             InlineKeyboardButton("3", callback_data=str(PFIZER2DOSE)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+        ],[
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
@@ -676,11 +569,11 @@ def status2dose(update: Update, context: CallbackContext) -> int:
         1 - Astrazeneca 
         2 - CoronaVac
         3 - Pfizer
-
-
         ''', reply_markup=reply_markup
     )
     return FIRST
+
+# ---------------------------------------- INTERVALO ASTRA ----------------------------------------
 
 
 def astra2dose(update: Update, context: CallbackContext) -> int:
@@ -689,19 +582,21 @@ def astra2dose(update: Update, context: CallbackContext) -> int:
     query.answer()
     keyboard = [
         [
-            InlineKeyboardButton("voltar", callback_data=str(STATUS2DOSE)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+            InlineKeyboardButton("◀️", callback_data=str(STATUS2DOSE)),
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     query.edit_message_text(
-        text='''Astrazeneca: intervalo de 8 semanas;
+        text='''Astrazeneca:
 
-
+        Intervalo de 8 semanas;
         ''', reply_markup=reply_markup
     )
     return FIRST
+
+# ---------------------------------------- INTERVALO CORONA ----------------------------------------
 
 
 def corona2dose(update: Update, context: CallbackContext) -> int:
@@ -711,19 +606,21 @@ def corona2dose(update: Update, context: CallbackContext) -> int:
     keyboard = [
         [
 
-            InlineKeyboardButton("voltar", callback_data=str(STATUS2DOSE)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+            InlineKeyboardButton("◀️", callback_data=str(STATUS2DOSE)),
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     query.edit_message_text(
-        text='''Coronavac: intervalo de 2 a 4 semanas;
-
-
+        text='''Coronavac: 
+        
+        Intervalo de 2 a 4 semanas;
         ''', reply_markup=reply_markup
     )
     return FIRST
+
+# ---------------------------------------- INTERVALO PFIZER ----------------------------------------
 
 
 def pfizer2dose(update: Update, context: CallbackContext) -> int:
@@ -733,25 +630,38 @@ def pfizer2dose(update: Update, context: CallbackContext) -> int:
     keyboard = [
         [
 
-            InlineKeyboardButton("voltar", callback_data=str(STATUS2DOSE)),
-            InlineKeyboardButton("Home", callback_data=str(START)),
-            InlineKeyboardButton("Close", callback_data=str(END)),
+            InlineKeyboardButton("◀️", callback_data=str(STATUS2DOSE)),
+            InlineKeyboardButton("⏏️ Home", callback_data=str(START)),
+            InlineKeyboardButton("🛑", callback_data=str(END)),
         ]
     ]
     reply_markup = InlineKeyboardMarkup(keyboard)
     query.edit_message_text(
-        text='''Pfizer: intervalo de 8 semanas;
-
-
+        text='''Pfizer:
+        
+        Intervalo de 8 semanas;
         ''', reply_markup=reply_markup
     )
     return FIRST
 
+# ---------------------------------------- FIM ----------------------------------------
+
+
+def end(update: Update, context: CallbackContext) -> int:
+    """Returns `ConversationHandler.END`, which tells the
+    ConversationHandler that the conversation is over.
+    """
+    query = update.callback_query
+    query.answer()
+    query.edit_message_text(text="Nos vemos na próxima consulta!")
+    return ConversationHandler.END
+
+# ---------------------------------------- MAIN ----------------------------------------
 
 def main() -> None:
     """Run the bot."""
     # Create the Updater and pass it your bot's token.
-    readarq = open("token2.txt")
+    readarq = open("token.txt")
     token = readarq.read()
     readarq.close()
     updater = Updater(token)
@@ -770,14 +680,6 @@ def main() -> None:
         states={
             FIRST: [
                 CallbackQueryHandler(locais, pattern='^' + str(LOC) + '$'),
-                CallbackQueryHandler(dose1, pattern='^' + str(DOSE1) + '$'),
-                CallbackQueryHandler(dose2, pattern='^' + str(DOSE2) + '$'),
-                CallbackQueryHandler(
-                    doseR85, pattern='^' + str(DOSER85) + '$'),
-                CallbackQueryHandler(
-                    pnoturno, pattern='^' + str(PNOTURNO) + '$'),
-                CallbackQueryHandler(six, pattern='^' + str(SIX) + '$'),
-                CallbackQueryHandler(seven, pattern='^' + str(SEVEN) + '$'),
                 CallbackQueryHandler(
                     taxaeficacia, pattern='^' + str(TAXAEFICACIA) + '$'),
                 CallbackQueryHandler(
